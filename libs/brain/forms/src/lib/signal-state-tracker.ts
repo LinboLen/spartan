@@ -10,7 +10,10 @@ export class SignalStateTracker implements StateTracker {
 		if (!control) return null;
 		return control;
 	});
-
+  // With signal forms, AbstractControl is implemented by InteropNgControl, whose control state
+  // properties (e.g. dirty, touched, invalid) are getter functions that internally read FormField state signals.
+  // Accessing them inside a computed() therefore creates reactive signal dependencies automatically.
+  // See: https://github.com/angular/angular/blob/39e382a756b552d2b7bd3ce2c364daee9d7a0056/packages/forms/signals/src/controls/interop_ng_control.ts#L68-L129
 	public readonly dirty = computed<boolean | null>(() => this._control()?.dirty ?? null);
 	public readonly touched = computed<boolean | null>(() => this._control()?.touched ?? null);
 	public readonly invalid = computed<boolean | null>(() => this._control()?.invalid ?? null);
